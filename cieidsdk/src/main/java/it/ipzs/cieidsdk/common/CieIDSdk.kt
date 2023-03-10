@@ -12,6 +12,7 @@ import android.nfc.Tag
 import android.nfc.TagLostException
 import android.nfc.tech.IsoDep
 import android.os.Build
+import android.os.Bundle
 import android.provider.Settings
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.observers.DisposableSingleObserver
@@ -214,12 +215,14 @@ object CieIDSdk : NfcAdapter.ReaderCallback {
     fun startNFCListening(activity: Activity) {
         try {
             if (!activity.isFinishing) {
+                val options = Bundle()
+                options.putInt(NfcAdapter.EXTRA_READER_PRESENCE_CHECK_DELAY, 6000)
                 nfcAdapter?.enableReaderMode(
                     activity,
                     this,
                     NfcAdapter.FLAG_READER_NFC_A or
                             NfcAdapter.FLAG_READER_NFC_B or NfcAdapter.FLAG_READER_SKIP_NDEF_CHECK,
-                    null
+                    options
                 )
             }
         } catch (throwable: Throwable) {
